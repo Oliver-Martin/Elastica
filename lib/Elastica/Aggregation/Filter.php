@@ -69,6 +69,10 @@ class Filter extends AbstractAggregation
             $array['aggs'] = $this->_convertArrayable($this->_aggs);
         }
 
+        if ($this->_minBucket){
+            $array['aggs'][$this->_minBucket->getName()] = $this->_minBucket->toArray();
+        }
+        
         return $array;
     }
 }
