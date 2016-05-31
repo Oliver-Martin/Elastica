@@ -19,6 +19,11 @@ abstract class AbstractAggregation extends Param implements NameableInterface
     protected $_aggs = array();
 
     /**
+     * @var MinBucket or null
+     */
+    protected $_minBucket = null;
+    
+    /**
      * @param string $name the name of this aggregation
      */
     public function __construct($name)
@@ -81,6 +86,20 @@ abstract class AbstractAggregation extends Param implements NameableInterface
     }
 
     /**
+     * Add a min-bucket
+     * 
+     * @param MinBucket $bucket
+     *
+     * @return  $this
+     */
+    public function addMinBucket(MinBucket $bucket)
+    {
+        $this->_minBucket = $bucket;
+
+        return $this;
+    }
+
+    /**
      * @return array
      */
     public function toArray()
@@ -93,6 +112,9 @@ abstract class AbstractAggregation extends Param implements NameableInterface
         }
         if (sizeof($this->_aggs)) {
             $array['aggs'] = $this->_convertArrayable($this->_aggs);
+        }
+        if ($this->_minBucket){
+            $array['aggs'][$this->_minBucket->getName()] = $this->_minBucket->toArray();
         }
 
         return $array;
