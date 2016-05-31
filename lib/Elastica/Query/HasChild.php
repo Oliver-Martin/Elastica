@@ -61,6 +61,11 @@ class HasChild extends AbstractQuery
         return $this->setParam('_scope', $scope);
     }
 
+    public function setInnerHits( $innerHits )
+    {
+        $this->innerHits = $innerHits;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -73,7 +78,10 @@ class HasChild extends AbstractQuery
         if (isset($array[$baseName]['query'])) {
             $array[$baseName]['query'] = $array[$baseName]['query']['query'];
         }
-
+        if ($this->innerHits === true) {
+            $array[$baseName]['inner_hits']['size'] = 300;
+        }
+       
         return $array;
     }
 }
